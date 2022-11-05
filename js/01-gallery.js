@@ -3,7 +3,7 @@ import { galleryItems } from './gallery-items.js';
 
 const refs = {
   gallery: document.querySelector('.gallery'),
-}
+};
 
 // ========== Создание и рендер разметки ==========
 
@@ -32,21 +32,27 @@ const onGalleryClick = (e) => {
     return;
   }
 
-  instance = basicLightbox.create(`<img width="1400" height="900" src="${imgSource}">`);
+  instance = basicLightbox.create(
+    `<img width="1400" height="900" src="${imgSource}">`,
+    {
+      onShow: addWindowEventListener,
+      onClose: removeWindowEventListener
+    },
+  );
 
   instance.show();
-  addWindowEventListener();
 };
 
 refs.gallery.addEventListener('click', onGalleryClick);
 
 // ========== Функции закрытия по Esc ==========
 
-const addWindowEventListener = () => window.addEventListener('keydown', onEscPress);
-
+const addWindowEventListener = () => { window.addEventListener('keydown', onEscPress) };
 const removeWindowEventListener = () => window.removeEventListener('keydown', onEscPress);
 
-const onEscPress = () => {
-  instance.close();
-  removeWindowEventListener();
+const onEscPress = (e) => {
+  if (e.key === 'Escape') {
+    instance.close();
+    removeWindowEventListener();
+  }
 };
